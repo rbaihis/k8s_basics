@@ -45,3 +45,4 @@ spec:
         image: my-image:latest
         ports:
         - containerPort: 8080
+```
