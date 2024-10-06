@@ -195,3 +195,176 @@ You can fetch the Pod template definition using:
 - **Check for Network Issues**
   If the DaemonSet Pods communicate with other services, network issues could lead to failures. You can check network connectivity using tools like ping, curl, or nc from within the Pods.
   
+---
+---
+# Exmple Node Exporter as DemonSet from A-to-Z (best practice)
+
+## Create a Namespace (Optional but Recommended)
+```bash
+kubectl create namespace monitoring
+```
+
+## Define the Node Exporter DaemonSet
+Create the DaemonSet YAML file (e.g., node-exporter-daemonset.yaml) with the following content:
+* - Key Points of the DaemonSet:
+      - hostNetwork: true: Node Exporter uses the host's network to bind directly to port 9100 on each node.
+      - Security Context: Runs as a non-root user (65534 is typically nobody), following least privilege principles.
+      - ReadOnly Root Filesystem: The filesystem is mounted as read-only, enhancing security.
+      - Resources: Specifies resource requests and limits to avoid resource contention.
+*
+```yaml
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    app: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  template:
+    metadata:
+      labels:
+        app: node-exporter
+    spec:
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      containers:
+      - name: node-exporter
+        image: prom/node-exporter:v1.6.1 # Use a specific stable version for production
+        ports:
+        - name: metrics
+          containerPort: 9100
+          hostPort: 9100
+          protocol: TCP
+        resources:                   # Resource requests and limits
+          requests:
+            memory: "30Mi"
+            cpu: "100m"
+          limits:
+            memory: "150Mi"
+            cpu: "200m"
+        args:
+          - --path.procfs=/proc
+          - --path.sysfs=/sys
+          - --web.listen-address=0.0.0.0:9100
+          - --collector.filesystem.ignored-mount-points
+          - "^/(dev|proc|sys|var/lib/docker/.+)($|/)"
+        securityContext:             # Security best practices
+          runAsUser: 65534           # Run as a non-root user (nobody)
+          runAsGroup: 65534
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+        volumeMounts:
+        - name: proc
+          mountPath: /host/proc
+          readOnly: true
+        - name: sys
+          mountPath: /host/sys
+          readOnly: true
+        - name: rootfs
+          mountPath: /rootfs
+          readOnly: true
+      volumes:
+      - name: proc
+        hostPath:
+          path: /proc
+      - name: sys
+        hostPath:
+          path: /sys
+      - name: rootfs
+        hostPath:
+          path: /
+  updateStrategy:                # Strategy for rolling updates
+    type: RollingUpdate
+
+```
+
+## Service for Node Exporter
+To expose Node Exporter metrics to Prometheus, create a service that allows Prometheus to scrape the /metrics endpoint from all the nodes.
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    app: node-exporter
+spec:
+  ports:
+  - name: metrics
+    port: 9100
+    targetPort: 9100
+    protocol: TCP
+  selector:
+    app: node-exporter
+  type: ClusterIP
+
+```
+
+## ServiceMonitor for Prometheus Operator
+If you're using the Prometheus Operator, you can create a ServiceMonitor resource so Prometheus can automatically detect and scrape Node Exporter Pods:
+
+```yaml
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: node-exporter
+  namespace: monitoring
+  labels:
+    app: node-exporter
+spec:
+  selector:
+    matchLabels:
+      app: node-exporter
+  endpoints:
+  - port: metrics
+    interval: 30s
+    scrapeTimeout: 10s
+  namespaceSelector:
+    matchNames:
+    - monitoring
+```
+
+## Deploy Node Exporter DaemonSet
+Now, deploy the DaemonSet and the accompanying Service:
+```bash
+kubectl apply -f node-exporter-daemonset.yaml
+kubectl apply -f node-exporter-service. yaml
+kubectl apply -f node-exporter-servicemonitor.yaml  # If using Prometheus Operator
+```
+
+## Verify the Deployment
+* - Check the status of the DaemonSet to ensure that it is running on all nodes:
+```bash
+kubectl get daemonset node-exporter -n monitoring
+```
+You should see the number of desired, current, and ready Pods matching the number of nodes in your cluster.
+
+* - Check the Pods created by the DaemonSet:
+
+```bash
+kubectl get pods -n monitoring -l app=node-exporter
+```
+
+* - Verify that the Node Exporter is accessible:
+```bash
+kubectl port-forward <node-exporter-pod> 9100:9100 -n monitoring
+```
+
+## Lastly on Prometheus server
+If you're not using Prometheus Operator, you’ll need to update your Prometheus configuration manually. Add the following scrape configuration to your `prometheus.yml` file:
+```yaml
+scrape_configs:
+  - job_name: 'node-exporter'
+    kubernetes_sd_configs:
+      - role: endpoints
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_service_label_app]
+        action: keep
+        regex: node-exporter
+    scrape_interval: 30s
+```
