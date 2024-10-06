@@ -1,8 +1,7 @@
 # Kubernetes Storage: Volumes, Persistent Volumes & Claims
    A Volume in Kubernetes is a mechanism for providing storage to containers within a pod. Unlike the ephemeral filesystem that comes with a container, volumes allow data to persist beyond the container’s lifecycle, enabling sharing and consistency across multiple containers in the same pod. Volumes are mounted inside the container at specified paths, making them accessible to applications running in the pod.
 
-
-**1. Kubernetes Volumes**
+## Kubernetes Volumes
 
 * **Definition:** Volumes are directories that are accessible by containers in a pod. They enable data to persist beyond the lifecycle of individual containers, but not always beyond the lifecycle of the pod itself (except for certain types like persistentVolumeClaim).
 
@@ -15,11 +14,11 @@
     * `csi`: Leverages any Container Storage Interface (CSI) compliant storage solution.CSI volumes enable integration with external storage systems.
 * **Usage:** Defined in the pod specification, volumes are mounted at specific paths inside containers. Data in `emptyDir` volumes is lost when the pod is deleted, while data in persistent volumes remains.
 
-## 1.2 Types of Kubernetes Volumes
+## 1.1 Types of Kubernetes Volumes
 
 Kubernetes provides various types of volumes, each serving different purposes. Below are the commonly used volume types:
 
-### 1.2.1 emptyDir
+### 1.1.1 emptyDir
 
 **Description:** An emptyDir volume is created when a pod is assigned to a node and is stored as an empty directory on the host node. It is used to share data between containers running in the same pod.
 
@@ -34,7 +33,7 @@ volumes:
   - name: scratch-space
     emptyDir: {}
 ```
-### 1.2.2 hostPath
+### 1.1.2 hostPath
 
 **Description:** A hostPath volume maps a directory or file from the host node's filesystem to the pod. This allows the pod to access the host's local filesystem, which can be useful for scenarios like log collection or access to specific device files.
 
@@ -54,7 +53,7 @@ volumes:
       type: Directory
 ```
 
-### 1.2.3 nfs (Network File System)
+### 1.1.3 nfs (Network File System)
 
 **Description:** The nfs volume type allows pods to mount an NFS share. This enables multiple pods to read and write from the same storage location, making it ideal for data sharing across multiple pods.
 
@@ -72,7 +71,7 @@ volumes:
       path: /exported/path
 ```
 
-### 1.2.4 persistentVolumeClaim
+### 1.1.4 persistentVolumeClaim
 
 **Description:** Links a pod to a Persistent Volume (PV). PVCs are used to request storage dynamically or statically from a PV, and persistence depends on the PV’s reclaim policy (Retain, Delete, or Recycle).
 
@@ -89,7 +88,7 @@ volumes:
       claimName: my-pvc
 ```
 
-### 1.2.5 configMap & secret
+### 1.1.5 configMap & secret
 Description:
 
 A ConfigMap provides configuration data as key-value pairs that can be mounted into the pod as files or environment variables.
@@ -111,7 +110,7 @@ volumes:
       secretName: my-secret
 ```
 
-### 1.2.6 csi (Container Storage Interface)
+### 1.1.6 csi (Container Storage Interface)
 
 **The csi volume type allows Kubernetes to interact with external storage systems that implement the CSI standard. It provides dynamic provisioning, snapshotting, cloning, and online resizing, enabling flexible integration with various storage backends like cloud storage, SANs, and others.
 
