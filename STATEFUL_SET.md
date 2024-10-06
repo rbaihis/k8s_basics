@@ -80,3 +80,104 @@ spec:
 - **Describe**: Use `kubectl describe statefulset my-statefulset` for detailed information about the StatefulSet, including events and conditions.
 - **Events**: Check events related to the StatefulSet with `kubectl get events --sort-by='.metadata.creationTimestamp'`.
 
+
+---
+___
+
+# Example PostgreSQL StatefulSet Example
+
+ example of a StatefulSet for deploying PostgreSQL in Kubernetes, where environment variables are sourced from a ConfigMap. This setup allows you to manage your PostgreSQL configuration separately from the application deployment.
+
+## Step 1: Create a ConfigMap
+
+First, create a ConfigMap to store your PostgreSQL environment variables. You can name it `pg-config` and include postgress envVars.
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pg-config
+data:
+  POSTGRES_DB: mydatabase
+  POSTGRES_USER: myuser
+  POSTGRES_PASSWORD: mypassword
+```
+## Step 2:  Create a StatefulSet for PostgreSQL
+Now, create a StatefulSet that uses the above ConfigMap for environment variables. (add secret for password as best practice later):
+
+```yaml
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+spec:
+  serviceName: "postgres"
+  replicas: 3
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:latest
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: pg-config
+        volumeMounts:
+        - name: pg-data
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: pg-data
+        persistentVolumeClaim:
+          claimName: pg-data-pvc
+  volumeClaimTemplates:
+  - metadata:
+      name: pg-data-pvc
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: 1Gi
+```
+
+## Step 3: Create a Headless Service
+  Create a headless service to enable stable network identities for the PostgreSQL pods.
+  
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  clusterIP: None
+  ports:
+  - port: 5432
+    targetPort: 5432
+  selector:
+    app: postgres
+```
+
+## Step 4: Deploy the Resources
+  You can deploy the ConfigMap, StatefulSet, and Service using the following commands:
+
+```bash
+kubectl apply -f pg-config.yaml
+kubectl apply -f postgres-statefulset.yaml
+kubectl apply -f postgres-service.yaml
+```
+
+## Step 5: Accessing PostgreSQL
+  Once your StatefulSet is up and running, you can connect to PostgreSQL using the following command (replace <pod-name> with one of your pod names):
+
+```yaml
+kubectl exec -it <pod-name> -- psql -U myuser -d mydatabase
+```
+
+## Summary
+  This example demonstrates a basic setup of PostgreSQL using a StatefulSet in Kubernetes with environment variables sourced from a ConfigMap. You can extend this setup by adding further configurations, such as resource limits, health checks, or persistent storage configurations, depending on your production needs.
