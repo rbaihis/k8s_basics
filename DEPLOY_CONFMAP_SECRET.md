@@ -39,7 +39,7 @@ Both Secrets and ConfigMaps are essential tools for managing configuration and s
 
 ---
 ---
-# Kubernetes Configuration for Spring Boot Application with PostgreSQL
+# Simple Example Kubernetes Configuration for Spring Boot Application with PostgreSQL
 
 This document outlines the Kubernetes configuration for a Spring Boot application that uses PostgreSQL. The configuration includes a Secret for the database password and a ConfigMap for other database connection parameters.
 
