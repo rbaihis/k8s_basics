@@ -21,7 +21,7 @@ A **DaemonSet** is a Kubernetes resource that ensures a copy of a specific Pod r
 - **System Daemons**: Executing system-level processes or scripts that require a presence on each node, such as security agents or backup services.
 
 
-# Important Fields in the DaemonSet Manifest
+## Important Fields in the DaemonSet Manifest
 
 - **apiVersion**: Specifies the API version (for DaemonSets, it is `apps/v1`).
 
