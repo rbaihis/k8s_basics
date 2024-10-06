@@ -43,6 +43,29 @@ Both Secrets and ConfigMaps are essential tools for managing configuration and s
 
 This document outlines the Kubernetes configuration for a Spring Boot application that uses PostgreSQL. The configuration includes a Secret for the database password and a ConfigMap for other database connection parameters.
 
+## 0. Spring Boot Application Properties
+
+You can configure your Spring Boot application to use these environment variables. Below are examples of how to do this in `application.properties` and `application.yml` files.
+
+### `application.properties`
+
+```properties
+spring.datasource.url=${SPRING_DATASOURCE_URL}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD}
+```
+
+### `application.yml`
+
+```yaml
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+```
+
+
 ## 1. Secret for PostgreSQL Password
 
 Create a Kubernetes Secret to store the PostgreSQL password.
