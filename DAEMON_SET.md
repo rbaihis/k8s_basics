@@ -33,13 +33,6 @@ A **DaemonSet** is a Kubernetes resource that ensures a copy of a specific Pod r
   - **selector**: Defines how to identify the Pods managed by this DaemonSet.
   - **template**: Contains the Pod template, specifying the containers, volumes, and other configurations that will be created.
 
-## Managing DaemonSets
-
-- **Viewing DaemonSets**: You can check the status of a DaemonSet with the following command:
-
-  ```bash
-  kubectl get daemonsets
-
 
 ## Considerations and Best Practices
 
@@ -100,7 +93,8 @@ spec:
   ```bash
   kubectl delete daemonset my-daemonset
   ```
-
+---
+---
 # Debugging a DaemonSet in Kubernetes
   Debugging a DaemonSet in Kubernetes involves several steps and tools to identify issues related to its deployment and performance. Here’s a comprehensive guide on how to debug DaemonSets effectively:
 
