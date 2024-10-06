@@ -69,7 +69,7 @@ spec:
   - Using the Volume: The bound PV can be mounted within pods using the PVC.
   - Reclaiming: After PVC deletion, the PV's reclaim policy dictates its fate (e.g., deletion).
 
-##Conclusion
+## Conclusion
 
 Kubernetes volumes, persistent volumes, and persistent volume claims provide a robust approach to storage management in cloud-native environments. They ensure data persistence and sharing across pods, while simplifying interaction with underlying storage solutions.
 
