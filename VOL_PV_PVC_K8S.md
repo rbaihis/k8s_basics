@@ -14,6 +14,8 @@ Kubernetes empowers developers to manage storage for stateful applications, ensu
     * `csi`: Leverages any Container Storage Interface (CSI) compliant storage solution.
 * **Usage:** Defined in the pod specification, volumes are mounted at specific paths inside containers. Data in `emptyDir` volumes is lost when the pod is deleted, while data in persistent volumes remains.
 
+---
+
 **2. Persistent Volumes (PVs)**
 
 * **Definition:** Dedicated storage resources provisioned by administrators or dynamically using Storage Classes. PVs are independent of pods, enabling decoupled storage management.
@@ -42,7 +44,7 @@ spec:
 
 ---
 
-## Persistent Volume Claims (PVCs)
+**2. Persistent Volumes Claims (PVCs)**
 
 * **Definition:** Requests for storage resources by users. PVCs enable users to specify storage requirements and access modes without needing infrastructure details.
 * **Characteristics:**
