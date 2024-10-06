@@ -206,12 +206,14 @@ kubectl create namespace monitoring
 
 ## Define the Node Exporter DaemonSet
 Create the DaemonSet YAML file (e.g., node-exporter-daemonset.yaml) with the following content:
-* - Key Points of the DaemonSet:
-      - hostNetwork: true: Node Exporter uses the host's network to bind directly to port 9100 on each node.
-      - Security Context: Runs as a non-root user (65534 is typically nobody), following least privilege principles.
-      - ReadOnly Root Filesystem: The filesystem is mounted as read-only, enhancing security.
-      - Resources: Specifies resource requests and limits to avoid resource contention.
 *
+*  Key Points of the DaemonSet:
+  * hostNetwork: true: Node Exporter uses the host's network to bind directly to port 9100 on each node.
+  * Security Context: Runs as a non-root user (65534 is typically nobody), following least privilege principles.
+  * ReadOnly Root Filesystem: The filesystem is mounted as read-only, enhancing security.
+  * Resources: Specifies resource requests and limits to avoid resource contention.
+*
+
 ```yaml
 apiVersion: apps/v1
 kind: DaemonSet
@@ -338,19 +340,19 @@ kubectl apply -f node-exporter-servicemonitor.yaml  # If using Prometheus Operat
 ```
 
 ## Verify the Deployment
-* - Check the status of the DaemonSet to ensure that it is running on all nodes:
+*  Check the status of the DaemonSet to ensure that it is running on all nodes:
 ```bash
 kubectl get daemonset node-exporter -n monitoring
 ```
 You should see the number of desired, current, and ready Pods matching the number of nodes in your cluster.
 
-* - Check the Pods created by the DaemonSet:
+*  Check the Pods created by the DaemonSet:
 
 ```bash
 kubectl get pods -n monitoring -l app=node-exporter
 ```
 
-* - Verify that the Node Exporter is accessible:
+*  Verify that the Node Exporter is accessible:
 ```bash
 kubectl port-forward <node-exporter-pod> 9100:9100 -n monitoring
 ```
