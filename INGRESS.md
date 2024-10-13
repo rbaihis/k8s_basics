@@ -81,11 +81,15 @@ Other production controllers:
 
 ### Step-by-Step Setup of NGINX Ingress Controller
 
-1. **Install NGINX Ingress Controller** via Helm:
+1-ViaHelm: **Install NGINX Ingress Controller**:
    ```bash
    helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
    helm repo update
    helm install nginx-ingress ingress-nginx/ingress-nginx      --namespace ingress-nginx --create-namespace      --set controller.replicaCount=2      --set controller.nodeSelector."kubernetes\.io/os"=linux      --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
+   ```
+1-ViaManifest: **Install NGINX Ingress Controller**:
+   ```bash
+   kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/cloud/deploy.yaml
    ```
 
 2. **Verify the Installation**:
