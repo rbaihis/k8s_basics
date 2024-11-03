@@ -22,8 +22,12 @@ In Kubernetes, labels are used extensively in various resources like controllers
   - **`spec: selector`** (1-to-1 mapping): 
     - Used for direct resource selection, typically when pointing to a single resource template that the controller manages.
 
-- **`spec: template: metadata: labels`**:
+- **`spec:template:metadata:labels`**:
   - This is where the labels of a resource template (like a `ReplicaSet`) are defined. A higher-level object in the hierarchy can target this resource by matching these labels.
+  - note (that are the same labels the pods will take because of the inheritance feature, unless are overridden In the pod level).
+### Important Note !!
+- `If` the higher-level controller is `label only defined`, but the `resource created defined in the template` has their **labels not defined** then they will inherit the `controller is label`.
+- it's a best practice to define the managed resources labels, for better flexibility and manageability.
 
 ```mermaid
 graph TD;
