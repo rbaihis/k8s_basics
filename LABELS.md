@@ -45,21 +45,6 @@ classDiagram
 
     class Deployment {
         - Label(usecase: organizing and filtering)
-        - selectors:matchLabels(points to managed resources based on the level)
-        - ```mermaid
-graph TD;
-deployment-->replicaset;
-statefulset-->replicaset;
-replicaset-->pods;
-daemonset-->pods;
-job-->pods;
-cronjob-->pods;
-```
-```mermaid
-classDiagram
-
-    class Deployment {
-        - Label(usecase: organizing and filtering)
         - template:selectors:matchLabels (points to managed resources based on the label)
     }
     class ReplicaSet {
@@ -78,22 +63,7 @@ classDiagram
     Service "1..*" -- "1..*" Pod
 ```
 
-    }
-    class ReplicaSet {
-        - Label(usecase: organizing and filtering)
-        - selectors:matchLabels(points to managed resources based on the label)
-    }
-    class Pod {
-        - Label(usecase: organizing and filtering)
-    }
-    class Service {
-        - selector(usecase: points to resources for traffic delivery based on the label)
-    }
 
-    Deployment "1..*" -- "1" ReplicaSet
-    ReplicaSet "1..*" -- "1" Pod
-    Service "1..*" -- "1..*" Pod
-```
 
 
 ## 2. Key Use Cases for Labels
