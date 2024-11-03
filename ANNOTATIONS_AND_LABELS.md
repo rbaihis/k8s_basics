@@ -4,26 +4,28 @@
 **Annotations** and **labels** are metadata attached to Kubernetes objects such as pods, services, and deployments. They help users and tools interact with and manage cluster resources efficiently.
 
 ---
-## 0. Labels - Ambiguity Explained:
->In Kubernetes, labels are used extensively in various resources like controllers (e.g., `Deployment`, `ReplicaSet`), `Pods`, and more. They appear in fields such as `metadata: labels`, `spec: selector`, `spec: selector: matchLabels`, and `spec: template: metadata: labels`. Here’s how each label type functions:
 
->**Label Types in Kubernetes**
+## 0. Kubernetes Labels - Ambiguity Explained
 
->> **`metadata: labels`**:
->>  - Primarily used for organizing and managing resources. Labels at this level are for **Resource Grouping and Filtering**.
->>  - This label set **does not control which resources a deployment manages**; it’s meant for categorization and can have any name since it’s not tied to resource selection.
->>  - If a resource **is not a controller** or **cannot manage other resources**, then higher-level controllers can use its labels to target it using selectors.
+In Kubernetes, labels are used extensively in various resources like controllers (e.g., `Deployment`, `ReplicaSet`), `Pods`, and more. They appear in fields such as `metadata: labels`, `spec: selector`, `spec: selector: matchLabels`, and `spec: template: metadata: labels`. Here’s how each label type functions:
 
->> **`spec: selector` and `spec: selector: matchLabels`**:
->>  - These are essential fields in controllers and must **match the resources that the controller manages**, typically the `spec: template: metadata: labels`.
->>  - **`spec: selector: matchLabels`** (1-to-many mapping): 
->>    - Used when you want to manage **multiple resources under a single controller** or for more **advanced management**.
->>    - **Example**: Suppose you have a standalone `ReplicaSet` and want to create a `Deployment` that also manages this `ReplicaSet` in addition to its own newly created template. `spec: selector: matchLabels` is used here to target multiple sub-resources.
->>  - **`spec: selector`** (1-to-1 mapping): 
->>    - Used for direct resource selection, typically when pointing to a single resource template that the controller manages.
+### Label Types in Kubernetes
 
->> **`spec: template: metadata: labels`**:
->>  - This is where the labels of a resource template (like a `ReplicaSet`) are defined. A higher-level object in the hierarchy can target this resource by matching these labels.
+- **`metadata: labels`**:
+  - Primarily used for organizing and managing resources. Labels at this level are for **Resource Grouping and Filtering**.
+  - This label set **does not control which resources a deployment manages**; it’s meant for categorization and can have any name since it’s not tied to resource selection.
+  - If a resource **is not a controller** or **cannot manage other resources**, then higher-level controllers can use its labels to target it using selectors.
+
+- **`spec: selector` and `spec: selector: matchLabels`**:
+  - These are essential fields in controllers and must **match the resources that the controller manages**, typically the `spec: template: metadata: labels`.
+  - **`spec: selector: matchLabels`** (1-to-many mapping): 
+    - Used when you want to manage **multiple resources under a single controller** or for more **advanced management**.
+    - **Example**: Suppose you have a standalone `ReplicaSet` and want to create a `Deployment` that also manages this `ReplicaSet` in addition to its own newly created template. `spec: selector: matchLabels` is used here to target multiple sub-resources.
+  - **`spec: selector`** (1-to-1 mapping): 
+    - Used for direct resource selection, typically when pointing to a single resource template that the controller manages.
+
+- **`spec: template: metadata: labels`**:
+  - This is where the labels of a resource template (like a `ReplicaSet`) are defined. A higher-level object in the hierarchy can target this resource by matching these labels.
 
 ```mermaid
 graph TD;
@@ -34,7 +36,6 @@ daemonset-->pods;
 job-->pods;
 cronjob-->pods;
 ```
-
 ```mermaid
 classDiagram
 
