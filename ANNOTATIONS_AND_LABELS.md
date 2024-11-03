@@ -4,6 +4,12 @@
 **Annotations** and **labels** are metadata attached to Kubernetes objects such as pods, services, and deployments. They help users and tools interact with and manage cluster resources efficiently.
 
 ---
+## 0. Labels - Ambiguity Explained:
+> Many Labels re defined in k8s resources:
+>> `metadata:labels`, `spec:selector:matchlLabels`, `spec:template:metadata:labels`
+>- ****:
+>- ****:
+>- ****:
 
 ## 1. Overview
 
