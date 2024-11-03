@@ -7,7 +7,7 @@
 ## 0. Labels - Ambiguity Explained:
 >In Kubernetes, labels are used extensively in various resources like controllers (e.g., `Deployment`, `ReplicaSet`), `Pods`, and more. They appear in fields such as `metadata: labels`, `spec: selector`, `spec: selector: matchLabels`, and `spec: template: metadata: labels`. Here’s how each label type functions:
 
->## Label Types in Kubernetes
+>**Label Types in Kubernetes**
 
 >> **`metadata: labels`**:
 >>  - Primarily used for organizing and managing resources. Labels at this level are for **Resource Grouping and Filtering**.
@@ -25,8 +25,7 @@
 >> **`spec: template: metadata: labels`**:
 >>  - This is where the labels of a resource template (like a `ReplicaSet`) are defined. A higher-level object in the hierarchy can target this resource by matching these labels.
 
-> **Kubernetes Label Relationships in Resource Management**
->>```mermaid
+```mermaid
 graph TD;
 deployment-->replicaset;
 statefulset-->replicaset;
@@ -34,9 +33,9 @@ replicaset-->pods;
 daemonset-->pods;
 job-->pods;
 cronjob-->pods;
->```
+```
 
->```mermaid
+```mermaid
 classDiagram
 
     class Deployment {
@@ -58,7 +57,7 @@ classDiagram
     Deployment "1..*" -- "1" ReplicaSet
     ReplicaSet "1..*" -- "1" Pod
     Service "1..*" -- "1..*" Pod
->```
+```
 
 
 ## 1. Overview
