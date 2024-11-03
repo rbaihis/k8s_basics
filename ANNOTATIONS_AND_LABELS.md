@@ -6,11 +6,9 @@
 ---
 
 ## 0. Kubernetes Labels - Ambiguity Explained
-
 In Kubernetes, labels are used extensively in various resources like controllers (e.g., `Deployment`, `ReplicaSet`), `Pods`, and more. They appear in fields such as `metadata: labels`, `spec: selector`, `spec: selector: matchLabels`, and `spec: template: metadata: labels`. Here’s how each label type functions:
 
 ### Label Types in Kubernetes
-
 - **`metadata: labels`**:
   - Primarily used for organizing and managing resources. Labels at this level are for **Resource Grouping and Filtering**.
   - This label set **does not control which resources a deployment manages**; it’s meant for categorization and can have any name since it’s not tied to resource selection.
