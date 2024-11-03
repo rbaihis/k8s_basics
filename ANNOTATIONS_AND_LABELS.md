@@ -28,9 +28,13 @@ classDiagram
         - matchLabels
     }
     class Pod
-    
-    Deployment "1..*" -- "1..*" ReplicaSet
-    ReplicaSet "1..*" -- "1..*" Pod
+    class Service {
+        - selector
+    }
+
+    Deployment "1..*" -- "1" ReplicaSet
+    ReplicaSet "1..*" -- "1" Pod
+    Service "1..*" -- "1..*" Pod
 ``` 
 
 
