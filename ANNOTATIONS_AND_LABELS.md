@@ -23,7 +23,9 @@ graph TD;
 deployment-->replicaset;
 statefulset-->replicaset;
 replicaset-->pods;
-
+daemonset-->pods;
+job-->pods;
+cronjob-->pods;
 ```
 ```mermaid
 classDiagram
