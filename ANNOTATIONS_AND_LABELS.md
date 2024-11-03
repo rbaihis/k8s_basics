@@ -21,19 +21,19 @@
 ```mermaid
 classDiagram
     class Deployment {
-        - Label(organisation purpose)
-        - matchLabels
+        - Label(usecase:organisation purpose)
+        - matchLabels(points to the managed resources)
         - template
     }
     class ReplicaSet {
-        - Label(management purpose by higher-level controller)
-        - matchLabels
+        - Label(usecase:management by higher-level controller)
+        - matchLabels(points to the managed resources)
     }
     class Pod{
-        - Label(purpose management purpose by higher-level controller)
+        - Labelusecase:management by higher-level controller)
     }
     class Service {
-        - selector(points to the resources with that label)
+        - selector(usecase: points to resources to deliver traffic)
     }
 
     Deployment "1..*" -- "1" ReplicaSet
