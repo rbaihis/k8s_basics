@@ -19,6 +19,14 @@
 >- **spec:template:metadata:labels**:
 >  - this is where you define the label of your template(replicasSet), so a higher object in the hierarchy can point to it using ().
 ```mermaid
+deployment-->replicaset;
+statefulset-->replicaset;
+replicaset-->pods;
+
+
+
+```
+```mermaid
 classDiagram
 
     class Deployment {
