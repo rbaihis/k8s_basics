@@ -40,19 +40,19 @@ cronjob-->pods;
 classDiagram
 
     class Deployment {
-        - Label(usecase: organization purpose)
-        - matchLabels(points to managed resources)
+        - Label(usecase: organizing and filtering)
+        - selectors:matchLabels(points to managed resources based on the lebel)
         - template
     }
     class ReplicaSet {
-        - Label(usecase: managed by higher-level controller)
-        - matchLabels(points to managed resources)
+        - Label(usecase: organizing and filtering)
+        - selectors:matchLabels(points to managed resources based on the label)
     }
     class Pod {
-        - Label(usecase: managed by higher-level controller)
+        - Label(usecase: organizing and filtering)
     }
     class Service {
-        - selector(usecase: points to resources for traffic delivery)
+        - selector(usecase: points to resources for traffic delivery based on the label)
     }
 
     Deployment "1..*" -- "1" ReplicaSet
