@@ -30,6 +30,7 @@ In Kubernetes, labels are used extensively in various resources like controllers
 - Kubernetes labels are not "inherited" from controllers. Instead, they are explicitly defined in the resource template (e.g., Deployment spec.template.metadata.labels for Pods).
 - If labels are missing from spec.template.metadata.labels, resources like Pods will not have the necessary labels, which could affect targeting by controllers like Services.
 - Best Practice: Always define consistent labels in spec.selector.matchLabels (in the controller) and spec.template.metadata.labels (in the template) to ensure that resources are consistently selected and managed by higher-level controllers.
+
 ```mermaid
 graph TD;
 deployment-->replicaset;
@@ -44,8 +45,39 @@ classDiagram
 
     class Deployment {
         - Label(usecase: organizing and filtering)
-        - selectors:matchLabels(points to managed resources based on the lebel)
-        - template
+        - selectors:matchLabels(points to managed resources based on the level)
+        - ```mermaid
+graph TD;
+deployment-->replicaset;
+statefulset-->replicaset;
+replicaset-->pods;
+daemonset-->pods;
+job-->pods;
+cronjob-->pods;
+```
+```mermaid
+classDiagram
+
+    class Deployment {
+        - Label(usecase: organizing and filtering)
+        - template:selectors:matchLabels (points to managed resources based on the label)
+    }
+    class ReplicaSet {
+        - Label(usecase: organizing and filtering)
+        - selectors:matchLabels(points to managed resources based on the label)
+    }
+    class Pod {
+        - Label(usecase: organizing and filtering)
+    }
+    class Service {
+        - selector(usecase: points to resources for traffic delivery based on the label)
+    }
+
+    Deployment "1..*" -- "1" ReplicaSet
+    ReplicaSet "1..*" -- "1" Pod
+    Service "1..*" -- "1..*" Pod
+```
+
     }
     class ReplicaSet {
         - Label(usecase: organizing and filtering)
