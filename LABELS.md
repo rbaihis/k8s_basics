@@ -9,7 +9,7 @@ Labels are key-value pairs attached to Kubernetes resources, enabling effective 
 
 ---
 
-## 1. Kubernetes Labels - Ambiguity Explained
+## 1. Kubernetes Labels-Selector - Ambiguity Explained
 In Kubernetes, labels are used extensively in various resources like controllers (e.g., `Deployment`, `ReplicaSet`), `Pods`, and more. They appear in fields such as `metadata: labels`, `spec: selector`, `spec: selector: matchLabels`, and `spec: template: metadata: labels`. Here’s how each label type functions:
 
 ### Label Types in Kubernetes
