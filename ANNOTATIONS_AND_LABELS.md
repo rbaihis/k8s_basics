@@ -27,6 +27,7 @@ In Kubernetes, labels are used extensively in various resources like controllers
 - If labels are missing from spec.template.metadata.labels, resources like Pods will not have the necessary labels, which could affect targeting by controllers like Services.
 - Best Practice: Always define consistent labels in spec.selector.matchLabels (in the controller) and spec.template.metadata.labels (in the template) to ensure that resources are consistently selected and managed by higher-level controllers.
 
+
 ```mermaid
 graph TD;
 deployment-->replicaset;
@@ -41,8 +42,7 @@ classDiagram
 
     class Deployment {
         - Label(usecase: organizing and filtering)
-        - selectors:matchLabels(points to managed resources based on the lebel)
-        - template
+        - template:selectors:matchLabels (points to managed resources based on the label)
     }
     class ReplicaSet {
         - Label(usecase: organizing and filtering)
