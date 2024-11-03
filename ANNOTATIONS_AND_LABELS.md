@@ -5,11 +5,34 @@
 
 ---
 ## 0. Labels - Ambiguity Explained:
-> Many Labels re defined in k8s resources:
->> `metadata:labels`, `spec:selector:matchlLabels`, `spec:template:metadata:labels`
->- ****:
->- ****:
->- ****:
+> Many Labels re defined in k8s resources such controllers(deployment|replicaset|etc), pods, etc:
+>> `metadata:labels`, `spec:selector and spec:selector:matchlLabels`, `spec:template:metadata:labels`
+>- **metadata:labels**:
+>  - High-level labeling, purpose for organizing and managing resources fo `Resource Grouping and Filtering`.
+>  - `Not involved in the deployment pointing to its managed pods` it can have different names `it does not matter`.
+>  - `If-object-is **not a controller or can be controlled**`: then `higher-level controllers will use its label` to pint to it using selectors.
+>- **spec:selector and spec:selector:matchlLabels**:
+>  - `those are very important` **it must point/match**  the resources that **it manages**typically the `spec:template:metadata:labels`.
+>  - `spec:selector:matchlLabels`**(1-to-many mapping)** : used if you have `more than one resource` you want to manage `under one controller`, or for more `advanced management`.
+>    - **Example**: assume you have defined a `stand alone replicaset` and you re creating `a new deployment` and you want `to manage that replicaset` plus having your deployment is own newly template created, here is when `spec:selector:matchlLabels` is used since u need to point to more than one sub-resource.
+>  - `spec:selector`**(1-to-1 mapping)** :  used for directly pointing to the resource, either for the `resource-template` you re just creating or an existing one . to 
+>- **spec:template:metadata:labels**:
+>  - this is where you define the label of your template(replicasSet), so a higher object in the hierarchy can point to it using ().
+```mermaid
+classDiagram
+    class Deployment {
+        - matchLabels
+        - template
+    }
+    class ReplicaSet {
+        - matchLabels
+    }
+    class Pod
+    
+    Deployment "1..*" -- "1..*" ReplicaSet
+    ReplicaSet "1..*" -- "1..*" Pod
+``` 
+
 
 ## 1. Overview
 
