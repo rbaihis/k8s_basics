@@ -18,7 +18,8 @@
 >  - `spec:selector`**(1-to-1 mapping)** :  used for directly pointing to the resource, either for the `resource-template` you re just creating or an existing one . to 
 >- **spec:template:metadata:labels**:
 >  - this is where you define the label of your template(replicasSet), so a higher object in the hierarchy can point to it using ().
-```classDiagram
+```mermaid
+classDiagram
 
     class Deployment {
         - Label(usecase: organisation purpose)
